@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Travel_Cross_Platform_App.MainPage">
+    
+    
+    <StackLayout VerticalOptions="Center" 
+                 Margin="20,130,20,0">
+        
+        <Entry x:Name="emailEntry"
+               Placeholder="Mail"
+               Keyboard="Email"/>
+        <Entry x:Name="passwordEntry"
+               Placeholder="Password"
+               IsPassword="True"/>
+        <Button x:Name="LoginButton"
+                Margin="0,30,0,0"
+                Text="Login"
+                Clicked="LoginButton_Clicked"
+                Style="{StaticResource normalButton}"/>
+        
+    </StackLayout>
+
+</ContentPage>
