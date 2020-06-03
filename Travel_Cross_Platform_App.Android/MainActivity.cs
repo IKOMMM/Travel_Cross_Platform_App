@@ -8,6 +8,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Android.Graphics;
+using Plugin.Permissions;
 
 namespace Travel_Cross_Platform_App.Droid
 {
@@ -24,6 +25,10 @@ namespace Travel_Cross_Platform_App.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
+            //Calls Maps and Permisions
+            Xamarin.FormsMaps.Init(this, savedInstanceState);
+            Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, savedInstanceState);
+
             string dbName = "travel_db.sqlite";
             string folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             string fullPath = System.IO.Path.Combine(folderPath, dbName);
@@ -35,6 +40,8 @@ namespace Travel_Cross_Platform_App.Droid
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
+            PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
