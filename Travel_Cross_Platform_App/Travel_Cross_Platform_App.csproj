@@ -11,13 +11,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Images\AppLogo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Images\AppLogo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Plugin.Permissions" Version="6.0.1" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.5.0.6" />
-    <PackageReference Include="Xamarin.Forms" Version="4.6.0.800" />
+    <PackageReference Include="Xamarin.Forms" Version="4.6.0.847" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="Microsoft.NETCore.Targets" Version="3.1.0" PrivateAssets="all" />
-    <PackageReference Include="Xamarin.Forms.Maps" Version="4.6.0.800" />
+    <PackageReference Include="Xamarin.Forms.Maps" Version="4.6.0.847" />
   </ItemGroup>
 
   <ItemGroup>

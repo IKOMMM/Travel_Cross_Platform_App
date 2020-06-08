@@ -10,6 +10,9 @@ using Plugin.Geolocator.Abstractions;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xamarin.Forms.Maps;
+using SQLite;
+using Travel_Cross_Platform_App.Model;
 
 
 namespace Travel_Cross_Platform_App
@@ -17,87 +20,71 @@ namespace Travel_Cross_Platform_App
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MapPage : ContentPage
     {
-        private bool hasLocationPermission = false;
         public MapPage()
         {
             InitializeComponent();
-            GetPermissions();
         }
 
-        private async void GetPermissions()
-        {
-            try
-            {
-                var status = await CrossPermissions.Current.CheckPermissionStatusAsync<LocationWhenInUsePermission>();
-                if (status != PermissionStatus.Granted)
-                {
-                    if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.LocationWhenInUse))
-                    {
-                        await DisplayAlert("Potrzebna Lokalizacja", "Potrzebujemy dostępu do lokalizacji!", "OK");
-                    }
-
-                    status = await CrossPermissions.Current.RequestPermissionAsync<LocationWhenInUsePermission>();
-                }
-                if (status == PermissionStatus.Granted)
-                {
-                    hasLocationPermission = true;
-                    location.IsShowingUser = true;
-
-                    GetLocation();
-                }
-                else
-                {
-                    await DisplayAlert("Lokacja odmówiona", "Nie podałeś nam lokalizacji, więc nie masz dostępu do swojej lokalizacji na mapie", "OK");
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", ex.Message, "OK");
-            }
-        }
-
-
-        protected override async void OnAppearing()
+        protected async override void OnAppearing()
         {
             base.OnAppearing();
 
-            if (hasLocationPermission)
-            {
-                var locator = CrossGeolocator.Current;
+            var locator = CrossGeolocator.Current;
+            locator.PositionChanged += Locator_PositionChanged;
+            await locator.StartListeningAsync(TimeSpan.Zero, 100);
 
-                locator.PositionChanged += Locator_PositionChanged;
-                await locator.StartListeningAsync(TimeSpan.Zero, 100);
+            var position = await locator.GetPositionAsync();
+
+            var center = new Xamarin.Forms.Maps.Position(position.Latitude, position.Longitude);
+            var span = new Xamarin.Forms.Maps.MapSpan(center, 2, 2);
+            location.MoveToRegion(span);
+
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<Post>();
+                var posts = conn.Table<Post>().ToList();
+
+                DisplayInMap(posts);
             }
-                GetLocation();
         }
-        protected override void OnDisappearing()
+
+        protected override async void OnDisappearing()
         {
             base.OnDisappearing();
 
-            CrossGeolocator.Current.StopListeningAsync();
-            CrossGeolocator.Current.PositionChanged -= Locator_PositionChanged;
+            var locator = CrossGeolocator.Current;
+            locator.PositionChanged -= Locator_PositionChanged;
+
+            await locator.StopListeningAsync();
         }
 
-
-        void Locator_PositionChanged(object sender, Plugin.Geolocator.Abstractions.PositionEventArgs e)
+        private void DisplayInMap(List<Post> posts)
         {
-            MoveMap(e.Position);
-        }
-
-        private async void GetLocation()
-        {
-            if (hasLocationPermission)
+            foreach (var post in posts)
             {
-                var locator = CrossGeolocator.Current;
-                var position = await locator.GetPositionAsync();
-                MoveMap(position);
+                try
+                {
+                    var position = new Xamarin.Forms.Maps.Position(post.Latitude, post.Longitude);
+
+                    var pin = new Xamarin.Forms.Maps.Pin()
+                    {
+                        Type = Xamarin.Forms.Maps.PinType.SavedPin,
+                        Position = position,
+                        Label = post.VenueName,
+                        Address = post.Address
+                    };
+
+                    location.Pins.Add(pin);
+                }
+                catch (NullReferenceException nre) { }
+                catch (Exception ex) { }
             }
         }
 
-        private void MoveMap(Position position)
+        private void Locator_PositionChanged(object sender, Plugin.Geolocator.Abstractions.PositionEventArgs e)
         {
-            var center = new Xamarin.Forms.Maps.Position(position.Latitude, position.Longitude);
-            var span = new Xamarin.Forms.Maps.MapSpan(center, 1, 1);
+            var center = new Xamarin.Forms.Maps.Position(e.Position.Latitude, e.Position.Longitude);
+            var span = new Xamarin.Forms.Maps.MapSpan(center, 2, 2);
             location.MoveToRegion(span);
         }
     }

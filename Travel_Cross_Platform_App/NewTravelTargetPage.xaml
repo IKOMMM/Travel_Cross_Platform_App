@@ -8,7 +8,8 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Save"
-                     Clicked="ToolbarItem_Clicked"/>
+                     Clicked="ToolbarItem_Clicked"
+                     IconImageSource="save.png"/>
     </ContentPage.ToolbarItems>
     
     
@@ -16,6 +17,35 @@
         <StackLayout>
             <Entry x:Name="experienceEntry"
                    Placeholder="Write your experience"/>
+            <ListView x:Name="venueListView"
+                      Margin="15, 0"
+                      HorizontalOptions="FillAndExpand">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>                            
+                                
+                                <Label Text="{Binding name}"
+                                       FontAttributes="Bold"/>
+                                <Label Grid.Row="1"
+                                       TextColor="RoyalBlue"
+                                       Text="{Binding location.address}"/>
+                                <Label Grid.Column="1"
+                                       Text="{Binding location.distance, StringFormat='{0} metry'}"/>
+
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>                
+            </ListView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

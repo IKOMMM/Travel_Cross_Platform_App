@@ -16,6 +16,10 @@ namespace Travel_Cross_Platform_App
         public MainPage()
         {
             InitializeComponent();
+
+            var assembly = typeof(MainPage);
+
+            iconImage.Source = ImageSource.FromResource("Travel_Cross_Platform_App.Assets.Images.AppLogo.png", assembly);
         }
 
         private void LoginButton_Clicked(object sender, EventArgs e)
