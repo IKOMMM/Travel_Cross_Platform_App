@@ -6,10 +6,22 @@
              mc:Ignorable="d"
              x:Class="Travel_Cross_Platform_App.ProfilePage">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Profile Page!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <StackLayout Margin="30,50,30,0">
+            <Label x:Name="postCounter"
+                   Text="Welcome to Profile Page!"
+                   TextColor="RoyalBlue"                   
+                   HorizontalOptions="Center" 
+                   FontAttributes="Bold"/>
+            <Label Text="posts"
+                   HorizontalOptions="Center"/>
+            <ListView x:Name="categoryList">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Path=Key}"
+                                  Detail="{Binding Path=Value}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>                
+            </ListView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

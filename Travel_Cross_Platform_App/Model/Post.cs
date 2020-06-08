@@ -15,7 +15,7 @@ namespace Travel_Cross_Platform_App.Model
 
         public string VenueName {get; set;}
         public string CategoryID { get; set; }
-        public string Categoryname { get; set; }
+        public string CategoryName { get; set; }
         public string Address { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }

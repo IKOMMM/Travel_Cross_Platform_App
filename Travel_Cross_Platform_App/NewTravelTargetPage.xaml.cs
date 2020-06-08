@@ -44,7 +44,7 @@ namespace Travel_Cross_Platform_App
             {
                 Experience = experienceEntry.Text,
                 CategoryID = firstCategory.id,
-                Categoryname = firstCategory.name,
+                CategoryName = firstCategory.name,
                 Address = selectedVenue.location.address,
                 Distance = selectedVenue.location.distance,
                 Latitude = selectedVenue.location.lat,
